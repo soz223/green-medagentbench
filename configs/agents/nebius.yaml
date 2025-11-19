@@ -1,0 +1,18 @@
+agents:
+  nebius-chat:
+    module: src.client.agents.HTTPAgent
+    parameters:
+      url: https://api.tokenfactory.nebius.com/v1/chat/completions
+      headers:
+        Content-Type: application/json
+        Authorization: Bearer ${NEBIUS_API_KEY}
+      body:
+        model: openai/gpt-oss-2024-09  # Nebius 文档提供的兼容模型名称
+        temperature: 0
+        max_tokens: 2048
+        messages: "${messages}"
+      prompter:
+        name: role_content_dict
+        args:
+          agent_role: assistant
+      return_format: "{response[choices][0][message][content]}"
