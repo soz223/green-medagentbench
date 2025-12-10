@@ -1,0 +1,53 @@
+# Git / version control
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# IDE / Editor settings
+.idea/
+.vscode/
+.claude/
+*.swp
+*.swo
+*~
+
+# Python cache/build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# Outputs / Logs
+outputs/
+logs/
+*.log
+
+# Tests
+tests/
+
+# Examples
+examples/
+
+# Documentation and other root files
+*.md
+!README.md
+LICENSE
+img/
+
+# OS-specific
+.DS_Store
+Thumbs.db

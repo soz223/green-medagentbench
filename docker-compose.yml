@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # FHIR Server - provides the EHR database
+  fhir-server:
+    image: jyxsu6/medagentbench:latest
+    ports:
+      - "${FHIR_HOST_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - medagent-network
+
+  # Green Agent - the evaluation environment
+  green-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${GREEN_AGENT_HOST_PORT:-8000}:8000"
+    environment:
+      - FHIR_BASE_URL=${FHIR_BASE_URL:-http://fhir-server:8080/fhir}
+    depends_on:
+      fhir-server:
+        condition: service_healthy
+    networks:
+      - medagent-network
+    healthcheck:
+      test: ["CMD", "curl", -f, "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+networks:
+  medagent-network:
+    driver: bridge
