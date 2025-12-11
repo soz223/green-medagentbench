@@ -94,4 +94,5 @@ def observation_to_json_str(obs: Observation) -> str:
     """
     把 Observation 转成格式化 JSON 字符串，方便直接塞进 prompt/返回给平台。
     """
+    # Use Pydantic v1 method (compatible with requirements.txt)
     return obs.json(indent=2, ensure_ascii=False)

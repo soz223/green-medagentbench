@@ -1,7 +1,7 @@
-# Green Healthcare Agent - Dockerfile
-# This Dockerfile packages the Green Agent for easy deployment and testing
+# MedAgentBench A2A Green Agent - Dockerfile
+# A2A-compliant Green Agent for healthcare AI evaluation
 
-FROM python:3.9-slim
+FROM --platform=linux/amd64 python:3.9-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -21,17 +21,22 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Set PYTHONPATH so imports work correctly
-ENV PYTHONPATH=/app:/app/src
+ENV PYTHONPATH=/app
 
-# Expose the Green Agent API port
+# Expose the A2A Green Agent port
 EXPOSE 8000
 
-# Make the startup script executable
+# Make the startup scripts executable
+RUN chmod +x /app/run_a2a_server.sh
 RUN chmod +x /app/run_green_agent.sh
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the Green Agent server
-ENTRYPOINT ["/app/run_green_agent.sh"]
+# A2A-compliant entrypoint
+# Accepts: --host, --port, --card-url
+ENTRYPOINT ["/app/run_a2a_server.sh"]
+
+# Default arguments (can be overridden)
+CMD []

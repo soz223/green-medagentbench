@@ -7,11 +7,8 @@ services:
     ports:
       - "${FHIR_HOST_PORT:-8080}:8080"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
+      disable: true
+
     networks:
       - medagent-network
 
@@ -25,8 +22,7 @@ services:
     environment:
       - FHIR_BASE_URL=${FHIR_BASE_URL:-http://fhir-server:8080/fhir}
     depends_on:
-      fhir-server:
-        condition: service_healthy
+      - fhir-server
     networks:
       - medagent-network
     healthcheck:

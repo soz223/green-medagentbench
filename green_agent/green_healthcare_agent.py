@@ -13,7 +13,7 @@ from green_agent.episode_manager import EpisodeManager
 
 
 SYSTEM_INSTRUCTION = """
-你是一个医疗评估环境的“裁判代理”（Green Agent 的被测方是紫色 Agent）。
+你是一个医疗评估环境的"裁判代理"（Green Agent 的被测方是紫色 Agent）。
 你不会自己做诊疗决策，只负责：
 
 1. 把当前任务、可用工具、上一步工具结果等信息，用 JSON 形式告诉紫色 Agent；
@@ -21,20 +21,8 @@ SYSTEM_INSTRUCTION = """
 
 紫色 Agent 必须严格遵守以下输出格式之一：
 
-1）调用工具：
-{
-  "action": "call_tool",
-  "tool_name": "<工具名，字符串>",
-  "arguments": {
-    ... 这里是传给工具的参数，必须是一个 JSON 对象 ...
-  }
-}
-
-2）结束任务：
-{
-  "action": "finish",
-  "final_summary": "用自然语言总结本次任务的最终结论和处理方案"
-}
+1）调用工具：action="call_tool", tool_name=工具名, arguments=参数对象
+2）结束任务：action="finish", final_summary=最终总结
 
 禁止输出任何额外文字，禁止输出多个 JSON 对象。
 """

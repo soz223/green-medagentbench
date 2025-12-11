@@ -1,0 +1,78 @@
+# MedAgentBench A2A Scenario Configuration
+# This file defines how to run a MedAgentBench evaluation using the A2A protocol
+
+[scenario]
+name = "MedAgentBench Healthcare AI Evaluation"
+description = "Evaluate a healthcare AI agent on MedAgentBench clinical tasks using FHIR data"
+version = "1.0.0"
+
+# Green Agent Configuration
+[green_agent]
+# Docker image for the green agent (evaluation environment)
+image = "ghcr.io/soz223/medagent-green:latest"
+
+# Or use local build:
+# build = "."
+# dockerfile = "Dockerfile"
+
+# Port mapping
+port = 8000
+
+# Agent endpoint paths
+health_endpoint = "/health"
+card_endpoint = "/card"
+assess_endpoint = "/assess"
+
+# Configuration passed to the green agent
+[green_agent.config]
+fhir_base_url = "http://fhir-server:8080/fhir"
+max_steps = 8
+# Optional: specify a specific task ID
+# task_id = "task1_0"
+
+# Purple Agent Configuration
+[purple_agent]
+# The agent being evaluated
+# This should be replaced with your actual purple agent
+image = "your-purple-agent:latest"
+
+# Or for local development:
+# build = "../your-purple-agent"
+
+port = 8001
+
+# Dependencies
+[dependencies]
+# FHIR server dependency
+[dependencies.fhir-server]
+image = "jyxsu6/medagentbench:latest"
+port = 8080
+health_check = "http://localhost:8080/fhir/metadata"
+
+# Participants mapping for A2A protocol
+[participants]
+purple_agent = "http://purple-agent:8001"
+
+# Assessment Configuration
+[assessment]
+# Number of assessments to run
+num_runs = 1
+
+# Timeout for each assessment (seconds)
+timeout = 300
+
+# Output configuration
+[output]
+# Directory to save results
+results_dir = "./results"
+
+# Save artifacts
+save_artifacts = true
+
+# Artifact format (json, jsonl)
+artifact_format = "json"
+
+# Logging
+[logging]
+level = "INFO"
+format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
